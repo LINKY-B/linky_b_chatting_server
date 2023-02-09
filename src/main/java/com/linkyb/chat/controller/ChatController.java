@@ -1,6 +1,8 @@
 package com.linkyb.chat.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.linkyb.chat.dto.ChatMessage;
+import com.linkyb.chat.repository.ChatRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -13,9 +15,10 @@ import org.springframework.stereotype.Controller;
 public class ChatController {
 
     private final SimpMessageSendingOperations messagingTemplate;
+    private final ChatRepository chatRepository;
 
     @MessageMapping("/chat/message") // /pub/chat/message - 메세지 발행
-    public void message(ChatMessage message) {
+    public void message(ChatMessage message) throws JsonProcessingException {
         if (ChatMessage.MessageType.ENTER.equals(message.getType())) {
             message.setMessage(message.getSender() + "님이 입장했습니다.");
         }
@@ -24,5 +27,6 @@ public class ChatController {
         }
         messagingTemplate.convertAndSend("/sub/chat/room/" + message.getRoomId(), message); // /sub/chat/room/1 - 구독
 
+        chatRepository.save(message);
     }
 }
