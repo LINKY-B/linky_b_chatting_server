@@ -7,9 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Repository
-public class ChatRepository{
+public class ChatRepository {
 
     private final MongoTemplate mongoTemplate;
 
@@ -20,5 +22,9 @@ public class ChatRepository{
         String messageJson = objectMapper.writeValueAsString(message);
         String roomId = message.getRoomId();
         mongoTemplate.insert(messageJson, roomId);
+    }
+
+    public List<ChatMessage> getMessages(String id) {
+        return mongoTemplate.findAll(ChatMessage.class, id);
     }
 }
