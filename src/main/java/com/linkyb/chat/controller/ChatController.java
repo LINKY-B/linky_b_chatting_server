@@ -17,6 +17,9 @@ public class ChatController {
     private final SimpMessageSendingOperations messagingTemplate;
     private final ChatRepository chatRepository;
 
+    /**
+     * 유저간 대화 전달 및 저장
+     */
     @MessageMapping("/chat/message") // /pub/chat/message - 메세지 발행
     public void message(ChatMessage message) throws JsonProcessingException {
         if (ChatMessage.MessageType.ENTER.equals(message.getType())) {
