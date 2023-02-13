@@ -21,4 +21,12 @@ public class ChatInfoController {
     public List<ChatMessage> getMessages(@PathVariable String id) {
         return repository.getMessages(id);
     }
+
+    /**
+     * 채팅방 별 최근 대화 내용과 전송 시간
+     */
+    @GetMapping("/message-info")
+    public List<ChatMessage> getMessagesInfo(@RequestParam List<String> values) {
+        return repository.getMessagesInfo(values);
+    }
 }
