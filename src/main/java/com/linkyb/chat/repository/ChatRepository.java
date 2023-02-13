@@ -20,10 +20,9 @@ public class ChatRepository {
     public void save(ChatMessage message) throws JsonProcessingException {
 
         ObjectMapper objectMapper = new ObjectMapper();
-        SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss");
         Date time = new Date();
 
-        message.setSendingTime(format.format(time));
+        message.setSendingTime(time.toString());
         String messageJson = objectMapper.writeValueAsString(message);
         String roomId = message.getRoomId();
         mongoTemplate.insert(messageJson, roomId);
